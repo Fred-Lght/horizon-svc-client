@@ -1,6 +1,6 @@
 # SVC-клиент для Horizon — техническая спецификация
 
-Статус: этап 1–2 (исследование и спецификация). Дата: 2026-11-19.
+Статус: этап 1–2 (исследование и спецификация). Дата: 2026-11-20.
 
 ## 0. Важные поправки к постановке задачи
 
@@ -34,7 +34,7 @@
 |---|---|---|
 | Игра | Minecraft Java Edition **26.3** | `horizon/README.md`, `sdk.json` |
 | Horizon HEAD на дату проверки | `716961b24de29a71ed6ecb99412cbe3a28ff3552` | `git log` |
-| **Целевой build (pin)** | **`dd67b76ff23e28c6d8e21859df600d31572f81a0`** | SDK-релиз `sdk-dd67b76…`, Nightly 2026-11-19 |
+| **Целевой build (pin)** | **`0a875da91dbb0fdcb7ba8c42c11341aa229af51a`** | SDK-релиз `sdk-0a875da…`, Nightly 2026-11-20 |
 | Rust toolchain SDK | **1.99.1** | `sdk.json` (`toolchain.rust`) |
 | `horizon` crate rust-version | 1.95, edition 2024 | `horizon/Cargo.toml` |
 | Mod API | **0.2** | `sdk.json` (`content_api`) |
@@ -53,7 +53,7 @@
 
 ## 2. Точки интеграции Horizon
 
-Проверено по сгенерированному API из SDK `dd67b76`, а не по догадкам.
+Проверено по сгенерированному API из SDK `0a875da`, а не по догадкам.
 
 ### 2.1 Манифест и сборка
 
@@ -67,7 +67,7 @@ capabilities = ["registries"]   # как в шаблоне cargo horizon-mod
 
 [native]
 game = "26.3"
-horizon = "dd67b76ff23e28c6d8e21859df600d31572f81a0"
+horizon = "0a875da91dbb0fdcb7ba8c42c11341aa229af51a"
 mixins = "e59da9094f0c2fdda6c627fe9eff22dec6a906f0"
 ```
 
@@ -377,8 +377,8 @@ SVC настолько, насколько это возможно без OpenAL
 ## 5. Проверенные крейты
 
 Собрано `cargo check`, `cargo test` и `cargo build --release` на Linux x86-64,
-Rust 1.99.1. SDK взят из релиза `sdk-dd67b76…`: SHA-256 `api-source.tar.xz`
-совпал с `sdk.json` (`4981ce83…c0efa`).
+Rust 1.99.1. SDK взят из релиза `sdk-0a875da…`: SHA-256 `api-source.tar.xz`
+совпал с `sdk.json` (`5d57c0b4…5b82d`).
 
 | Крейт | Версия | Проверка |
 |---|---|---|
@@ -437,7 +437,7 @@ src/
 Проверено:
 
 - исходники Horizon и SVC прочитаны в клонах;
-- SDK `dd67b76` скачан, `cargo check -p horizon-mod-api` проходит;
+- SDK `0a875da` скачан, `cargo check -p horizon-mod-api` проходит;
 - `cpal`, `opus` (bundled libopus), `aes-gcm`, `rand` собираются;
 - `cargo test` — 35 тестов, включая полный UDP-handshake против локального mock-сервера;
 - точные сигнатуры хуков и host-методов взяты из сгенерированного API;

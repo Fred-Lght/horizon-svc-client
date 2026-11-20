@@ -24,7 +24,7 @@ Groups, whispers and the 2.7 / compatibility 21 protocol are not implemented yet
 
 ## Requirements
 
-- Horizon pinned to `dd67b76ff23e28c6d8e21859df600d31572f81a0` (Nightly 2026-11-19).
+- Horizon pinned to `0a875da91dbb0fdcb7ba8c42c11341aa229af51a` (Nightly 2026-11-20).
 - A working microphone and output device for the audio parts.
 - The launcher builds against its pinned Rust 1.99.1 and the signed SDK for that build.
 - Build-time native tools: CMake (the `opus` crate vendors libopus) and, on Linux,
