@@ -39,25 +39,23 @@ fn run() {
             return;
         }
     };
-    let rate = config.sample_rate();
+    let rate = config.sample_rate().0;
     let channels = config.channels() as usize;
     let format = config.sample_format();
     log::info!(
         "svc_client: input device {:?}, {rate} Hz, {channels} ch, {format:?}",
-        device
-            .description()
-            .map(|description| description.name().to_owned())
-            .unwrap_or_default()
+        device.name().unwrap_or_default()
     );
 
     let ring: Arc<Mutex<VecDeque<f32>>> = Arc::new(Mutex::new(VecDeque::with_capacity(16_384)));
-    let err_fn = |error: cpal::Error| log::warn!("svc_client: input stream error: {error}");
+    let err_fn = |error: cpal::StreamError| log::warn!("svc_client: input stream error: {error}");
 
+    let stream_config = config.config();
     let stream = match format {
-        SampleFormat::F32 => build::<f32>(&device, config.into(), Arc::clone(&ring), err_fn),
-        SampleFormat::I16 => build::<i16>(&device, config.into(), Arc::clone(&ring), err_fn),
-        SampleFormat::I32 => build::<i32>(&device, config.into(), Arc::clone(&ring), err_fn),
-        SampleFormat::U16 => build::<u16>(&device, config.into(), Arc::clone(&ring), err_fn),
+        SampleFormat::F32 => build::<f32>(&device, &stream_config, Arc::clone(&ring), err_fn),
+        SampleFormat::I16 => build::<i16>(&device, &stream_config, Arc::clone(&ring), err_fn),
+        SampleFormat::I32 => build::<i32>(&device, &stream_config, Arc::clone(&ring), err_fn),
+        SampleFormat::U16 => build::<u16>(&device, &stream_config, Arc::clone(&ring), err_fn),
         other => {
             log::warn!("svc_client: unsupported input sample format {other:?}");
             return;
@@ -207,10 +205,10 @@ fn run() {
 /// Build a stream that downmixes every callback block to mono `f32`.
 fn build<T>(
     device: &cpal::Device,
-    config: cpal::StreamConfig,
+    config: &cpal::StreamConfig,
     ring: Arc<Mutex<VecDeque<f32>>>,
-    err_fn: impl FnMut(cpal::Error) + Send + 'static,
-) -> Result<cpal::Stream, cpal::Error>
+    err_fn: impl FnMut(cpal::StreamError) + Send + 'static,
+) -> Result<cpal::Stream, cpal::BuildStreamError>
 where
     T: cpal::SizedSample + ToMono,
 {

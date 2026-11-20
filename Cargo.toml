@@ -17,5 +17,7 @@ horizon-mod-api = { path = ".horizon/sdk/api/crates/horizon-mod-api" }
 log = "0.4"
 aes-gcm = "0.11"
 rand = "0.10"
-cpal = "0.18"
+cpal = "0.16"
 opus = "0.4"
+# Keep the game's libc pin: a newer 0.2.x would replace its locked graph.
+libc = "=0.2.190"

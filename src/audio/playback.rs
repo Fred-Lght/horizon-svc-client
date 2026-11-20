@@ -8,7 +8,7 @@ use std::thread;
 use std::time::Duration;
 
 use cpal::traits::{DeviceTrait, HostTrait, StreamTrait};
-use cpal::{FromSample, SampleFormat, SampleRate, SizedSample};
+use cpal::{FromSample, SampleFormat, SizedSample};
 
 use super::mixer::{self, Mixer};
 
@@ -37,15 +37,12 @@ fn run() {
         }
     };
 
-    let rate = config.sample_rate();
+    let rate = config.sample_rate().0;
     let channels = config.channels() as usize;
     let format = config.sample_format();
     log::info!(
         "svc_client: output device {:?}, {rate} Hz, {channels} ch, {format:?}",
-        device
-            .description()
-            .map(|description| description.name().to_owned())
-            .unwrap_or_default()
+        device.name().unwrap_or_default()
     );
 
     let state = Arc::new(Mutex::new(OutputState::new(
@@ -53,12 +50,13 @@ fn run() {
         f64::from(MIX_RATE) / f64::from(rate),
     )));
 
-    let err_fn = |error: cpal::Error| log::warn!("svc_client: output stream error: {error}");
+    let err_fn = |error: cpal::StreamError| log::warn!("svc_client: output stream error: {error}");
+    let stream_config = config.config();
     let stream = match format {
-        SampleFormat::F32 => build::<f32>(&device, config.into(), state, err_fn),
-        SampleFormat::I16 => build::<i16>(&device, config.into(), state, err_fn),
-        SampleFormat::I32 => build::<i32>(&device, config.into(), state, err_fn),
-        SampleFormat::U16 => build::<u16>(&device, config.into(), state, err_fn),
+        SampleFormat::F32 => build::<f32>(&device, &stream_config, state, err_fn),
+        SampleFormat::I16 => build::<i16>(&device, &stream_config, state, err_fn),
+        SampleFormat::I32 => build::<i32>(&device, &stream_config, state, err_fn),
+        SampleFormat::U16 => build::<u16>(&device, &stream_config, state, err_fn),
         other => {
             log::warn!("svc_client: unsupported output sample format {other:?}");
             return;
@@ -86,10 +84,10 @@ fn run() {
 
 fn build<T>(
     device: &cpal::Device,
-    config: cpal::StreamConfig,
+    config: &cpal::StreamConfig,
     state: Arc<Mutex<OutputState>>,
-    err_fn: impl FnMut(cpal::Error) + Send + 'static,
-) -> Result<cpal::Stream, cpal::Error>
+    err_fn: impl FnMut(cpal::StreamError) + Send + 'static,
+) -> Result<cpal::Stream, cpal::BuildStreamError>
 where
     T: SizedSample + FromSample<f32>,
 {
@@ -181,9 +179,4 @@ impl OutputState {
 
 fn lerp(a: f32, b: f32, t: f32) -> f32 {
     a + (b - a) * t
-}
-
-#[allow(dead_code)]
-fn _sample_rate_is_u32(rate: SampleRate) -> u32 {
-    rate
 }
