@@ -1,0 +1,21 @@
+[package]
+name = "horizon-svc-client"
+version = "0.1.0"
+edition = "2024"
+rust-version = "1.95"
+license = "GPL-3.0-or-later"
+publish = false
+description = "Clean-room Simple Voice Chat 2.6 client for Horizon"
+
+[lib]
+name = "svc_client"
+path = "src/lib.rs"
+
+
+[dependencies]
+horizon-mod-api = { path = ".horizon/sdk/api/crates/horizon-mod-api" }
+log = "0.4"
+aes-gcm = "0.11"
+rand = "0.10"
+cpal = "0.18"
+opus = "0.4"

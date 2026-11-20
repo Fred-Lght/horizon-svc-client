@@ -1,0 +1,14 @@
+id = "svc_client"
+name = "Simple Voice Chat for Horizon"
+version = "0.1.0"
+description = "Clean-room client for the Simple Voice Chat 2.6 protocol: proximity voice, push-to-talk and a speaking HUD."
+authors = ["voice-rust"]
+license = "GPL-3.0-or-later"
+side = "client"
+api = "0.2"
+capabilities = ["registries"]
+
+[native]
+game = "26.3"
+horizon = "dd67b76ff23e28c6d8e21859df600d31572f81a0"
+mixins = "e59da9094f0c2fdda6c627fe9eff22dec6a906f0"

@@ -1,0 +1,13 @@
+{
+  "svc_client.setting.enabled": "Voice chat",
+  "svc_client.setting.mode": "Microphone mode",
+  "svc_client.setting.activation_threshold_db": "Voice activation threshold (dB)",
+  "svc_client.setting.mic_gain": "Microphone gain",
+  "svc_client.setting.volume": "Voice volume",
+  "svc_client.setting.hud": "Show voice HUD",
+  "svc_client.mode.push_to_talk": "Push to talk",
+  "svc_client.mode.voice_activation": "Voice activation",
+  "svc_client.key.category": "Simple Voice Chat",
+  "svc_client.key.push_to_talk": "Push to talk",
+  "svc_client.key.mute": "Mute microphone"
+}
